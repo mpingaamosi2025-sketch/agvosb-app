@@ -1,0 +1,27 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>AgVosb app icon</title>
+  <desc>Geometric A and V monogram in Flutter-inspired blue and cyan.</desc>
+  <defs>
+    <linearGradient id="iconBg" x1="64" y1="448" x2="448" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#062E5B"/>
+      <stop offset="1" stop-color="#0A5C98"/>
+    </linearGradient>
+    <linearGradient id="iconBlue" x1="116" y1="394" x2="366" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0876B2"/>
+      <stop offset="1" stop-color="#19C7DA"/>
+    </linearGradient>
+    <linearGradient id="iconCyan" x1="180" y1="382" x2="386" y2="92" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10A7CD"/>
+      <stop offset="1" stop-color="#62E5E8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Dark rounded field gives the transparent icon a high-contrast safe area. -->
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="url(#iconBg)"/>
+  <path d="M92 390L165 122H234L160 390H92Z" fill="#0A477D"/>
+  <path d="M190 390L263 122H332L258 390H190Z" fill="url(#iconBlue)"/>
+  <path d="M114 326L163 270H266L316 326H114Z" fill="#0A83B7"/>
+  <path d="M173 280L253 212L299 249L220 318L173 280Z" fill="url(#iconCyan)"/>
+  <path d="M229 346L322 142L402 84L326 346H229Z" fill="#0B70A9"/>
+  <path d="M313 180L402 84L376 207L313 180Z" fill="#62E5E8"/>
+</svg>

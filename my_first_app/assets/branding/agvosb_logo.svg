@@ -1,0 +1,25 @@
+<svg width="1200" height="360" viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>AgVosb software logo</title>
+  <desc>Geometric A and V symbol followed by the AgVosb wordmark.</desc>
+  <defs>
+    <linearGradient id="agvosbBlue" x1="36" y1="300" x2="286" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#075B9E"/>
+      <stop offset="1" stop-color="#18C5D9"/>
+    </linearGradient>
+    <linearGradient id="agvosbCyan" x1="95" y1="292" x2="260" y2="74" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D88BE"/>
+      <stop offset="1" stop-color="#59E1E5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- A/V monogram: a rising A crossed by a forward-moving V. -->
+  <path d="M42 292L106 68H169L105 292H42Z" fill="#073B70"/>
+  <path d="M118 292L181 68H245L181 292H118Z" fill="url(#agvosbBlue)"/>
+  <path d="M61 238L100 196H190L229 238H61Z" fill="#0A6EAD"/>
+  <path d="M109 202L178 143L219 177L151 236L109 202Z" fill="url(#agvosbCyan)"/>
+  <path d="M143 255L224 89L281 55L213 255H143Z" fill="#0B6AA6"/>
+  <path d="M216 121L279 55L260 143L216 121Z" fill="#5BE0E4"/>
+
+  <text x="330" y="236" fill="#073B70" font-family="Montserrat, Avenir Next, Segoe UI, sans-serif" font-size="154" font-weight="700" letter-spacing="-4">AgVosb</text>
+  <rect x="336" y="266" width="420" height="8" rx="4" fill="url(#agvosbBlue)"/>
+</svg>
