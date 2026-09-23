@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/song.dart';
 import '../services/audio_service.dart';
+import '../widgets/now_playing_card.dart';
 
 class NowPlayingScreen extends StatefulWidget {
   const NowPlayingScreen({
@@ -28,83 +29,40 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
     isFavorite = widget.song.isFavorite;
   }
 
-  String _formatDuration(int seconds) {
-    final minutes = seconds ~/ 60;
-    final remaining = seconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${remaining.toString().padLeft(2, '0')}';
-  }
-
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: widget.audio,
       builder: (context, _) {
         final theme = Theme.of(context);
-        final currentSong = widget.audio.currentSong ?? widget.song;
-        final totalSeconds = currentSong.durationSeconds > 0 ? currentSong.durationSeconds : widget.audio.duration.inSeconds;
-        final currentSeconds = widget.audio.position.inSeconds;
-        final progress = totalSeconds > 0 ? (currentSeconds / totalSeconds).clamp(0.0, 1.0) : 0.0;
 
         return Scaffold(
-      appBar: AppBar(title: const Text('Now Playing')),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-          child: Column(
-            children: [
-              const SizedBox(height: 8),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(28),
-                child: currentSong.albumArt.isNotEmpty
-                    ? Image.network(
-                    currentSong.albumArt,
-                        height: 300,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, _, _) => Container(
-                          height: 300,
-                          color: theme.colorScheme.primaryContainer,
-                          child: const Icon(Icons.music_note, size: 72),
-                        ),
-                      )
-                    : Container(
-                        height: 300,
-                        color: theme.colorScheme.primaryContainer,
-                        child: const Icon(Icons.music_note, size: 72),
+          appBar: AppBar(title: const Text('Now Playing')),
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: NowPlayingCard(audio: widget.audio, showPlayButton: false, expanded: true),
+                  ),
+                  const SizedBox(height: 22),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton.icon(
+                        onPressed: () => setState(() => isFavorite = !isFavorite),
+                        icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
+                        label: const Text('Favorite'),
                       ),
-              ),
-              const SizedBox(height: 28),
-              Text(currentSong.title, style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800), textAlign: TextAlign.center),
-              const SizedBox(height: 6),
-              Text(currentSong.artist, style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant), textAlign: TextAlign.center),
-              const SizedBox(height: 18),
-              SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
-                  trackHeight: 5,
-                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
-                ),
-                child: Slider(
-                  value: progress,
-                  onChanged: (value) async {
-                    final seekTo = Duration(seconds: (totalSeconds * value).round());
-                    await widget.audio.seek(seekTo);
-                  },
-                  min: 0,
-                  max: totalSeconds > 0 ? 1 : 0,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(_formatDuration(currentSeconds)),
-                    Text(_formatDuration(totalSeconds)),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
+                      TextButton.icon(
+                        onPressed: () {},
+                        icon: const Icon(Icons.queue_music_rounded),
+                        label: const Text('Queue'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -131,26 +89,10 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                   ),
                 ],
               ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton.icon(
-                    onPressed: () => setState(() => isFavorite = !isFavorite),
-                    icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
-                    label: const Text('Favorite'),
-                  ),
-                  TextButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.queue_music_rounded),
-                    label: const Text('Queue'),
-                  ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
         );
       },
     );

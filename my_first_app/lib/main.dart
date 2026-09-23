@@ -23,13 +23,15 @@ Future<void> main() async {
 
   final settings = await StorageService().loadSettings();
   final initialDarkMode = settings['darkMode'] as bool? ?? false;
+  final audio = await AudioService.initialize();
 
-  runApp(AgVosbApp(initialDarkMode: initialDarkMode));
+  runApp(AgVosbApp(initialDarkMode: initialDarkMode, audio: audio));
 }
 
 class AgVosbApp extends StatefulWidget {
-  const AgVosbApp({super.key, this.initialDarkMode = false});
+  const AgVosbApp({super.key, this.initialDarkMode = false, required this.audio});
   final bool initialDarkMode;
+  final AudioService audio;
 
   @override
   State<AgVosbApp> createState() => AgVosbAppState();
@@ -38,7 +40,7 @@ class AgVosbApp extends StatefulWidget {
 class AgVosbAppState extends State<AgVosbApp> {
   final StorageService storage = StorageService();
   final NotificationService notifications = NotificationService();
-  final AudioService audio = AudioService();
+  late final AudioService audio = widget.audio;
   List<CalendarEvent> events = [];
   List<AlarmItem> alarms = [];
   bool isDarkMode;
@@ -226,6 +228,7 @@ class _MainScreenState extends State<MainScreen> {
         onToggle: (alarm, enabled) => app.saveAlarm(alarm.copyWith(enabled: enabled)),
       ),
       MusicScreen(
+        audio: app.audio,
         onSongSelected: (song, songs) {
           widget.app.audio.playSong(song, songs: songs);
           Navigator.of(context).push(

@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 
 import '../models/playlist.dart';
 import '../models/song.dart';
+import '../services/audio_service.dart';
 import '../services/media_storage_service.dart';
 import '../services/music_service.dart';
+import '../widgets/now_playing_card.dart';
 import '../widgets/song_card.dart';
 
 class MusicScreen extends StatefulWidget {
-  const MusicScreen({super.key, this.onSongSelected});
+  const MusicScreen({super.key, required this.audio, this.onSongSelected});
 
+  final AudioService audio;
   final void Function(Song song, List<Song> songs)? onSongSelected;
 
   @override
@@ -97,17 +100,19 @@ class _MusicScreenState extends State<MusicScreen> {
     final recent = _songs.where((song) => song.lastPlayed != null).toList()..sort((a, b) => (b.lastPlayed ?? DateTime.fromMillisecondsSinceEpoch(0)).compareTo(a.lastPlayed ?? DateTime.fromMillisecondsSinceEpoch(0)));
     final favoriteSongs = _songs.where((song) => _favoriteIds.contains(song.id)).toList();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('AgVosb Music'),
-        actions: [
-          IconButton(onPressed: _createPlaylist, icon: const Icon(Icons.playlist_add_rounded)),
-        ],
-      ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-          children: [
+    return AnimatedBuilder(
+      animation: widget.audio,
+      builder: (context, _) => Scaffold(
+        appBar: AppBar(
+          title: const Text('AgVosb Music'),
+          actions: [
+            IconButton(onPressed: _createPlaylist, icon: const Icon(Icons.playlist_add_rounded)),
+          ],
+        ),
+        body: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+            children: [
             TextField(
               controller: _searchController,
               decoration: InputDecoration(
@@ -126,6 +131,10 @@ class _MusicScreenState extends State<MusicScreen> {
               onChanged: _handleSearch,
             ),
             const SizedBox(height: 22),
+            if (widget.audio.currentSong != null) ...[
+              NowPlayingCard(audio: widget.audio),
+              const SizedBox(height: 22),
+            ],
             Text('Recently Played', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
             const SizedBox(height: 12),
             SizedBox(
@@ -216,7 +225,8 @@ class _MusicScreenState extends State<MusicScreen> {
                   onTap: () => widget.onSongSelected?.call(song, _songs),
                   onFavorite: (value) => _toggleFavorite(song.id),
                 )),
-          ],
+            ],
+          ),
         ),
       ),
     );
